@@ -9,7 +9,8 @@ import java.util.Base64;
 import java.util.HexFormat;
 
 @Service
-public class FileDownloadService {
+public class FileDownloadService
+{
     // 서버에 파일을 놓는 디렉토리 (프로젝트 루트 기준)
     private static final String FILE_DIR    = "./server-files/";
     // 한 번에 전송할 chunk 크기 = 500KB
@@ -57,12 +58,9 @@ public class FileDownloadService {
         Path filePath   = resolveFilePath(filename);
         long fileSize   = Files.size(filePath);
         long offset     = (long) seq * CHUNK_SIZE;
-        // 마지막 chunk는 CHUNK_SIZE보다 작을 수 있으므로 Math.min으로 조정
-        int  bytesToRead = (int) Math.min(CHUNK_SIZE, fileSize - offset);
+        int  bytesToRead = (int) Math.min(CHUNK_SIZE, fileSize - offset);        // 마지막 chunk는 CHUNK_SIZE보다 작을 수 있으므로 Math.min으로 조정
         byte[] chunk    = new byte[bytesToRead];
-        // RandomAccessFile → 원하는 위치로 바로 이동(seek)하여 읽기 가능
-        // Sequential read가 아닌 Random access 필요한 상황
-        try (RandomAccessFile raf = new RandomAccessFile(filePath.toFile(), "r"))
+        try (RandomAccessFile raf = new RandomAccessFile(filePath.toFile(), "r"))        // RandomAccessFile → 원하는 위치로 바로 이동(seek)하여 읽기 가능
         {
             raf.seek(offset);
             raf.readFully(chunk);

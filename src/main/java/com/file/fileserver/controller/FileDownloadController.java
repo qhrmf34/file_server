@@ -39,7 +39,7 @@ public class FileDownloadController
         {
             return ResponseEntity.notFound().build();
         }
-        try
+        try //while반복은 클라이언트에서 요청-> 클라이언트 한곳에 묶이는것 방지
         {
             long fileSize = service.getFileSize(filename);
             int  seq      = request.getSeq();
@@ -51,9 +51,7 @@ public class FileDownloadController
             }
             String base64Data = service.readChunkAsBase64(filename, seq);            // chunk 읽기 + 응답
             long   sentBytes  = service.calculateSentBytes(seq, fileSize);
-
             System.out.printf("[SERVER] seq=%-4d | sent=%,12d / %,12d%n", seq, sentBytes, fileSize);
-
             return ResponseEntity.ok(FileChunkResponse.ofChunk(filename, seq, base64Data, sentBytes));
         }
         catch (Exception e)
