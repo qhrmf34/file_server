@@ -39,7 +39,7 @@ public class FileDownloadController
         {
             return ResponseEntity.notFound().build();
         }
-        try //while반복은 클라이언트에서 요청-> 클라이언트 한곳에 묶이는것 방지
+        try //rest api구조이기에 응답은 1번 -> while 반복은 클라이언트에서 요청
         {
             long fileSize = service.getFileSize(filename);
             int  seq      = request.getSeq();
